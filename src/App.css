@@ -36,3 +36,91 @@
     transform: rotate(360deg);
   }
 }
+
+.margin-top{
+  margin-top: 30px;
+}
+.footerPage{
+  background-color: lightgrey;
+  color: gray;
+  height: 100px;
+  text-align: center;
+  padding-top: 40px;
+}
+
+.react-datepicker-wrapper{
+  width: 100%;
+}
+
+.textalign-center{
+  text-align: center;
+}
+
+.error{
+  color: red;
+  font-size: 14px;
+}
+
+.line{
+  border-bottom: 2px solid black;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.marginBtm{
+  margin-bottom: 30px;
+}
+
+.marginTop{
+  margin-top: 30px;
+}
+
+.marginTopBtm{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.formBlock{
+  min-height: 80vh;
+  position: relative;
+  background-image: url("./assests/worldMap.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.form {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.overlay{
+  background-color: black;
+  opacity: 0.4;
+}
+
+.btnColor{
+  background-color: #3099b0;
+  border : none;
+}
+
+.btnColor:hover{
+  background-color: #24798c;
+}
+
+.quote { 
+  color: white;
+}
+
+.together{
+  color : #42ddff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+.paddingTB{
+  padding : 30px 0px;
+}
