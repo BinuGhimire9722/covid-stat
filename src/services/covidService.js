@@ -25,6 +25,17 @@ class CovidService {
         return result;
     }
 
+    static getStatistic = async() =>{
+        let result = await axios.get("https://covid-193.p.rapidapi.com/statistics",{
+            headers : {
+                "x-rapidapi-key" : header.key,
+                "x-rapidapi-host" : header.host,
+                "useQueryString" : true
+            }
+        });
+        return result;
+    }
+
 }
 
 

@@ -8,15 +8,10 @@ class DataComponent extends React.Component{
                 <div className="textalign-center marginTopBtm"><h3>Covid Data</h3></div>
             
                 <Row >
-                    <Col md={6}>
-                    <div>Continent  </div>
-                    {this.props.continent}
-                    </Col>
-
-                    <Col md={6}>
-                    <div>Country </div>
-                    {this.props.country}
-                    </Col>
+                    <div className="clearfix">
+                        <div className="float-left">{this.props.continent} - {this.props.country}</div>
+                        <div className="float-right">{this.props.date}</div>
+                    </div>
                 </Row>
 
                 <div className="line marginTopBtm"></div>

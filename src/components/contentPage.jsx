@@ -7,6 +7,7 @@ import CovidService from "../services/covidService.js";
 import DataComponent from "./dataComponent.jsx";
 import LoadingGif from "../assests/loading.gif";
 import { toast } from 'react-toastify';
+import WorldStat from "./worldStat.jsx";
 class ContentPage extends React.Component{
 
     constructor(props){
@@ -23,18 +24,59 @@ class ContentPage extends React.Component{
             showResponse : false,
             isLoading : false,
             countries : [],
+            statistic : [],
+            worldStat : {},
+            topDeath : [],
+            topRecovered : [],
+
         }
     }
+
+    getSortOrder=(prop1,prop2)=> {    
+        return function(a, b) {    
+            if (a[prop1][prop2] > b[prop1][prop2]) {    
+                return -1;    
+            } else if (a[prop1][prop2] < b[prop1][prop2]) {    
+                return 1;    
+            }    
+            return 0;    
+        }    
+    }    
+
 
     async componentDidMount(){
         let dateString= this.convertDate(this.state.startDate);
 
         let result = await CovidService.getCountry();
-        console.log(result);
+
+        let response = await CovidService.getStatistic();
+        
+        let topDeath = response.data.response;
+        topDeath.sort(this.getSortOrder("deaths","total"));
+
+        let topRecovered = response.data.response;
+        topRecovered.sort(this.getSortOrder("cases","recovered"));
+
+        response.data.response.sort(this.getSortOrder("cases","active"));
+        
+        let allStat = response.data.response[0];
+        let worldCovid = {
+            active: allStat.cases.active,
+            recovered : allStat.cases.recovered,
+            cases : allStat.cases.new,
+            death : allStat.deaths.new,
+            total : allStat.cases.total,
+            date : allStat.day,
+        }
+
         this.setState({
             dateString,
             countries : result.data.response,
             country : result.data.response[0],
+            statistic : response.data.response,
+            worldStat : worldCovid,
+            topDeath,
+            topRecovered,
         })
 
     }
@@ -45,7 +87,6 @@ class ContentPage extends React.Component{
     }
 
     convertDate=(date)=>{
-        console.log(date);
         let year = date.getFullYear();
         let month= date.getMonth()+1;
         if(month < 10){
@@ -62,7 +103,6 @@ class ContentPage extends React.Component{
     setStartDate=(date)=>{
         let newDate = new Date(date);
         let dateString = this.convertDate(newDate);
-        console.log(dateString);
         this.setState({ 
             startDate : date,
             dateString,
@@ -74,7 +114,6 @@ class ContentPage extends React.Component{
             isLoading : true
         })
         var result = await CovidService.getData(this.state.country,this.state.dateString);
-        console.log(result);
         let response = result.data.response;
         let errors= result.data.errors;
         if(errors.length==0 && response.length!=0){
@@ -123,8 +162,7 @@ class ContentPage extends React.Component{
     }
     render() {
         return <div className="contentPage">
-
-            
+            <WorldStat worldData={this.state.worldStat}/>
 
             <Row className="formBlock" id="formBlock">
                 <div className="overlay"></div>
@@ -178,9 +216,14 @@ class ContentPage extends React.Component{
                         }
 
                         {this.state.showResponse == true && this.state.isLoading==false?
-                        <DataComponent cases={this.state.cases} continent={this.state.continent}
-                        country={this.state.country} deaths={this.state.deaths} tests={this.state.tests}/>
-                            :
+                        <div>
+                            <DataComponent cases={this.state.cases} continent={this.state.continent} date={this.state.dateString}
+                            country={this.state.country} deaths={this.state.deaths} tests={this.state.tests}/>
+                            <div className="textalign-right paddingTB ">
+                                <Button className="btnColor" href="#formBlock">Check More</Button>
+                            </div>
+                        </div>
+                        :
                         <></>
                         }
                     </Container>
