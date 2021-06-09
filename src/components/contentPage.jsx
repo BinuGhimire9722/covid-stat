@@ -8,6 +8,7 @@ import DataComponent from "./dataComponent.jsx";
 import LoadingGif from "../assests/loading.gif";
 import { toast } from 'react-toastify';
 import WorldStat from "./worldStat.jsx";
+import CountryData from "./countryData.jsx";
 class ContentPage extends React.Component{
 
     constructor(props){
@@ -24,11 +25,13 @@ class ContentPage extends React.Component{
             showResponse : false,
             isLoading : false,
             countries : [],
-            statistic : [],
+            topActive : [],
             worldStat : {},
             topDeath : [],
             topRecovered : [],
-
+            continentActive : [],
+            continentRecovered : [],
+            continentDeath : [],
         }
     }
 
@@ -43,23 +46,10 @@ class ContentPage extends React.Component{
         }    
     }    
 
+    worldCovidData=(dataArray)=>{
 
-    async componentDidMount(){
-        let dateString= this.convertDate(this.state.startDate);
-
-        let result = await CovidService.getCountry();
-
-        let response = await CovidService.getStatistic();
-        
-        let topDeath = response.data.response;
-        topDeath.sort(this.getSortOrder("deaths","total"));
-
-        let topRecovered = response.data.response;
-        topRecovered.sort(this.getSortOrder("cases","recovered"));
-
-        response.data.response.sort(this.getSortOrder("cases","active"));
-        
-        let allStat = response.data.response[0];
+        dataArray.sort(this.getSortOrder("cases","active"));
+        let allStat = dataArray[0];
         let worldCovid = {
             active: allStat.cases.active,
             recovered : allStat.cases.recovered,
@@ -67,19 +57,73 @@ class ContentPage extends React.Component{
             death : allStat.deaths.new,
             total : allStat.cases.total,
             date : allStat.day,
+            
         }
+
+        return worldCovid;
+    }
+
+    countryWiseData=(countryData,isCountry)=>{
+        
+        if(isCountry==true){
+            countryData = countryData.filter((item)=>{
+                return (item.continent != item.country)
+            })
+        }else{
+            countryData = countryData.filter((item)=>{
+                return (item.continent == item.country)
+            })
+        }
+
+        
+        let topDeath = countryData;
+        topDeath.sort(this.getSortOrder("deaths","total"));
+        topDeath = topDeath.slice(1,11);
+
+        let topRecovered = countryData;
+        topRecovered.sort(this.getSortOrder("cases","recovered"));
+        topRecovered = topRecovered.slice(1,11);
+
+        let topActive = countryData;
+        topActive.sort(this.getSortOrder("cases","active"));
+        topActive = topActive.slice(1,11);
+
+        let arrayJson = {
+            topDeath,
+            topRecovered,
+            topActive
+        }
+
+        return arrayJson;
+    }
+
+    async componentDidMount(){
+        let dateString= this.convertDate(this.state.startDate);
+
+        let result = await CovidService.getCountry();
+
+        let response = await CovidService.getStatistic();
+
+        let worldCovid = this.worldCovidData(response.data.response);
+        let countryArray = this.countryWiseData(response.data.response,true);
+        let continentArray = this.countryWiseData(response.data.response,false);
+
 
         this.setState({
             dateString,
             countries : result.data.response,
             country : result.data.response[0],
-            statistic : response.data.response,
-            worldStat : worldCovid,
-            topDeath,
-            topRecovered,
+            topDeath : countryArray.topDeath,
+            topRecovered : countryArray.topRecovered,
+            topActive : countryArray.topActive,
+            worldCovid,
+            continentActive : continentArray.topActive,
+            continentDeath : continentArray.topDeath,
+            continentRecovered : continentArray.topRecovered,
         })
 
     }
+
     handleCountry=(e)=>{
         this.setState({
             [e.target.name] : e.target.value
@@ -231,6 +275,12 @@ class ContentPage extends React.Component{
                 <Col md={2}></Col>
                 <div id="dataBlock"></div>
             </Row>
+            <hr></hr>
+            <CountryData active={this.state.topActive} recovered={this.state.topRecovered} 
+            death={this.state.topDeath} title="Country wise data" date="Till Today"></CountryData>
+            <hr></hr>
+            <CountryData active={this.state.continentActive} death={this.state.continentDeath}
+            recovered={this.state.continentRecovered} title="Continent wise data" date="Till Today"/>
 
         </div>
     }

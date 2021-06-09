@@ -121,6 +121,7 @@
 html {
   scroll-behavior: smooth;
 }
+
 .paddingTB{
   padding : 30px 0px;
 }
@@ -139,4 +140,16 @@ html {
 
 .worldPadding{
   padding : 5px 0px;
+}
+
+.marginTopBtm{
+  margin : 15px 0px;
+}
+
+.paddingLeft{
+ padding-left: 10px;
+}
+
+.paddingRight{
+  padding-right: 10px;
 }
