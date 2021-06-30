@@ -6,15 +6,15 @@ class WorldStat extends React.Component{
     render () {
         return <div>
 
-            <Container>
-                <Row className="textalign-center worldPadding">
+            <Container className = "worldStat"> 
+                <Row className="textalign-center worldPadding padding">
                     <Col md={2}>
                         <div>Date</div>
                         <div>{this.props.worldData.date}</div>
                     </Col>
                     <Col md={2}>
                         <div>Active Cases</div>
-                        <div>{this.props.worldData.active}</div>
+                        <div className="redText">{this.props.worldData.active}</div>
                     </Col>
 
                     <Col md={2}>
@@ -24,7 +24,7 @@ class WorldStat extends React.Component{
 
                     <Col md={2}>
                         <div>Recovered</div>
-                        <div>{this.props.worldData.recovered}</div>
+                        <div className="greenText">{this.props.worldData.recovered}</div>
                     </Col>
 
                     <Col md={2}>

@@ -1,0 +1,47 @@
+.redText{
+    color:tomato;
+}
+
+.greenText{
+    color:green;
+}
+
+@mixin buttonTheme($bgColor: DarkGray, $text : white) {
+    background-color: $bgColor;
+    padding: 10px 20px;
+    color: $text;
+    border: 1px solid black;
+}
+
+.success{
+    @include buttonTheme($bgColor: green,$text : purple);
+}
+.danger{
+    @include buttonTheme($bgColor: red,$text : white);
+}
+
+.padding{
+
+    border: $redBorder
+
+}
+
+.worldStat {
+
+    .padding{
+
+    }
+
+}
+
+.worldState .padding{
+
+}
+
+
+.dataComp{
+
+    .padding{
+
+    }
+}

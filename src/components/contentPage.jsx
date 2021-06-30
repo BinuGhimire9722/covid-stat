@@ -9,6 +9,7 @@ import LoadingGif from "../assests/loading.gif";
 import { toast } from 'react-toastify';
 import WorldStat from "./worldStat.jsx";
 import CountryData from "./countryData.jsx";
+import MyContext from "../context/myContext.js";
 class ContentPage extends React.Component{
 
     constructor(props){
@@ -59,7 +60,7 @@ class ContentPage extends React.Component{
             date : allStat.day,
             
         }
-
+        console.log()
         return worldCovid;
     }
 
@@ -116,7 +117,7 @@ class ContentPage extends React.Component{
             topDeath : countryArray.topDeath,
             topRecovered : countryArray.topRecovered,
             topActive : countryArray.topActive,
-            worldCovid,
+            worldStat : worldCovid,
             continentActive : continentArray.topActive,
             continentDeath : continentArray.topDeath,
             continentRecovered : continentArray.topRecovered,
@@ -206,6 +207,12 @@ class ContentPage extends React.Component{
     }
     render() {
         return <div className="contentPage">
+
+            <MyContext.Consumer>
+                {context=>{
+                    return <p>{context.cars.car002.name + context.cars.car002.price}</p>
+                }}
+            </MyContext.Consumer>
             <WorldStat worldData={this.state.worldStat}/>
 
             <Row className="formBlock" id="formBlock">
